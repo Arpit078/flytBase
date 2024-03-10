@@ -13,10 +13,9 @@ sitesRouter.get("/",authenticateJWT,
 			.status(200)
 			.json(doc)
 		}
-		catch{
-			const error =
-				new Error("Error! Something went wrong.");
-			return next(error);
+		catch(err){
+			console.log(err)
+			return res.sendStatus(500)
 		}
     }
 )
@@ -40,15 +39,19 @@ sitesRouter.post("/add",authenticateJWT,
             console.log(err)
 			return res.sendStatus(500);
 		}
+		const sendObj = {
+			"creating_user_id":user_id,
+			"created_site_id":newSite._id
+		}
         res
 		.status(200)
-		.json(newSite._id)
+		.json(sendObj)
     }
 )
 sitesRouter.put("/update",authenticateJWT,
 	async (req, res) => {
+		const id = req.body._id
 		try {
-			const  id = req.body._id
 			const update = req.body.update
 			const site = await Site.findOne({_id:id})
 			if(site.user_id === req.user.userId){
@@ -57,36 +60,31 @@ sitesRouter.put("/update",authenticateJWT,
 			else{
 				return res.sendStatus(403)
 			}
-		} catch {
-			const error =
-			new Error("Error! Something went wrong.");
-			return res.sendStatus(403);
+		} catch(err) {
+			console.log(err)
+			return res.sendStatus(500);
 		}
         res
 		.status(200)
-		.json({"updated":id})
+		.json({"updated_site_id":id})
     }
 )
 sitesRouter.delete("/delete",authenticateJWT,
 async (req, res) => {
+	const id = req.body._id
 	try {
-		const  id = req.body._id
-		const site = await Site.findOne({_id:id})
-		if(site.user_id === req.user.userId){
-			await Site.findOneAndDelete({_id:id})
-		}
-		else{
+		const flag = await Site.findOneAndDelete({_id:id,user_id:req.user.userId})
+		console.log(id,req.user.userId)
+		if(!flag){
 			return res.sendStatus(403)
 		}
-	} catch {
-		const error =
-			new Error("Error! Something went wrong.");
-
-		return next(error);
+	} catch (err){
+		console.log(err)
+		return res.sendStatus(500)	
 	}
 	res
 	.status(200)
-	.json({"deleted":id})
+	.json({"deleted_site_id":id})
 }
 )
 export default sitesRouter;

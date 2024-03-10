@@ -38,13 +38,13 @@ missionsRouter.post("/add",authenticateJWT,
 			await Site.findOneAndUpdate({ _id: site_id},  { $push: { missions_id: newMission._id } })
 		} 
 		catch {
-			const error =
-				new Error("Error! Something went wrong.");
 			return res.sendStatus(500);
 		}
         res
 		.status(200)
-		.json({"added to" : site_id})
+		.json({
+			"mission_id":newMission._id,
+			"added_to" : site_id})
     }
 )
 missionsRouter.put("/update",authenticateJWT,
@@ -53,6 +53,7 @@ missionsRouter.put("/update",authenticateJWT,
 		try {
 			const update = req.body.update
 			update.$currentDate = { updated_at: true };
+			console.log(id)
 			const flag = await Mission.findOneAndUpdate({_id:id,user_id:req.user.userId},update)
 			if(!flag){
 				return res.sendStatus(403)
@@ -64,7 +65,7 @@ missionsRouter.put("/update",authenticateJWT,
 		}
         res
 		.status(200)
-		.json({"updated":id})
+		.json({"updated_mission_id":id})
     }
 )
 // missionsRouter.put("/move",authenticateJWT,
@@ -98,7 +99,7 @@ async (req, res) => {
 	}
 	res
 	.status(200)
-	.json({"deleted":id})
+	.json({"deleted_mission_id":id})
 }
 )
 export default missionsRouter;

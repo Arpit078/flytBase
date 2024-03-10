@@ -7,6 +7,9 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+ENV CONNECTION_URI=mongodb+srv://flyt-base:flyt-base-database@cluster0.wbsispz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+ENV JWT_SECRET=flytBase.assignment
+ENV PORT=3000
 
 EXPOSE 3000
 

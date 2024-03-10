@@ -47,7 +47,10 @@ dronesRouter.post("/add",authenticateJWT,
 		}
         res
 		.status(200)
-		.json({"added to" : site_id})
+		.json({
+			"drone_added_to_site_with_id" : site_id,
+			"created_drone_id":newDrone._id
+	})
     }
 )
 dronesRouter.put("/update",authenticateJWT,
@@ -67,7 +70,7 @@ dronesRouter.put("/update",authenticateJWT,
 		}
         res
 		.status(200)
-		.json({"updated":id})
+		.json({"updated_drone_id":id})
     }
 )
 dronesRouter.put("/move",authenticateJWT,
@@ -84,7 +87,7 @@ dronesRouter.put("/move",authenticateJWT,
 		}
         res
 		.status(200)
-		.json({"moved to":destination_site_id})
+		.json({"moved_drone_to":destination_site_id})
 	})
 dronesRouter.delete("/delete",authenticateJWT,
 async (req, res) => {
@@ -101,7 +104,7 @@ async (req, res) => {
 	}
 	res
 	.status(200)
-	.json({"deleted":id})
+	.json({"deleted_drone_id":id})
 }
 )
 dronesRouter.put("/remove",authenticateJWT,
@@ -121,7 +124,7 @@ async (req,res)=>{
 	}
 	res
 	.status(200)
-	.json({"removed":id})
+	.json({"removed_drone_id":id})
 })
 
 export default dronesRouter;

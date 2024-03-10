@@ -3,7 +3,7 @@ const { Schema, model } = mongoose;
 
 const categorySchema = new Schema(
     {
-        "category_name": {type:String,unique:true},
+        "category_name":String,
         "user_id":String,
         "color": String,
         "tag_name": String,
